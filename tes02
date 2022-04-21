@@ -1,0 +1,89 @@
+import datetime
+import os
+import time
+import xlrd
+import openpyxl
+
+
+#月
+month = datetime.datetime.today().strftime("%m")
+#日
+day = datetime.datetime.today().strftime("%d")
+#今天
+today_date = datetime.datetime.today().strftime("%Y%m%d")
+today = datetime.datetime.today()
+#计算偏移量
+oneday = datetime.timedelta(days=1)
+yesterday = today - oneday
+#昨天
+yesterday_date = yesterday.strftime("%Y%m%d")
+
+path =   #设置输出路径
+os.chdir(path)
+retval = os.getcwd()
+#print ("目录修改成功 %s" % retval)
+
+
+
+#原路径
+file_home = ''
+#打开目标文件夹下的.xlsx文件
+workbook = xlrd.open_workbook(file_home )
+#获取该文件的所有sheet名（返回的是一个列表 ）
+sheetnames = workbook.sheet_names()
+#打印所有sheet的名字的列表
+#print(sheetnames)
+#索引默认从0开始
+worksheet=workbook.sheet_by_index(0)
+
+wb = openpyxl.load_workbook(file_home)
+#从第一个工作薄开始  0代表第一个
+ws = wb[wb.sheetnames[0]]
+#打印所有行
+#print(ws.max_row)
+#打印所有列
+#print(ws.max_column)
+
+#ws.cell(1, 1).value = ""
+ws.cell(2, 1).value = ":" + today_date
+
+#从第二个工作薄开始  0代表第一个
+ws = wb[wb.sheetnames[1]]
+#打印所有行
+#print(ws.max_row)
+#打印所有列
+#print(ws.max_column)
+
+#修改时间输出月日
+ws.cell(2, 1).value =  month +"月" + day + "日"
+
+
+#从第3个工作薄开始  0代表第一个
+ws = wb[wb.sheetnames[2]]
+ws.cell(2, 1).value = ":" + today_date
+#保存修改的xlsx文件
+wb.save(retval + ""+ today_date +".xlsx")
+print("已保存到桌面！")
+print("删除前天巡检表！")
+time.sleep(5)   #推迟执行的秒数
+
+
+#print (os.getcwd())#获得当前工作目录
+#print (os.path.abspath('.'))#获得当前工作目录
+#print os.path.abspath('..')#获得当前工作目录的父目录
+#print os.path.abspath(os.curdir)#获得当前工作目录
+
+#当前时间
+today = datetime.datetime.now()
+#计算偏移量  得到前天
+offset = datetime.timedelta(days=-2)
+re_date = (today + offset).strftime('%Y%m%d')#前天
+
+#print(retval + '\巡检表' +re_date+'.xlsx')
+
+if os.path.exists(retval + '/业务巡检表' +re_date+'.xlsx'):
+    os.remove(retval + '/巡检表'+ re_date+'.xlsx')
+    print("已删除前日巡检表")
+
+
+
